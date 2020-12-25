@@ -4,6 +4,7 @@
 * lightweight
 * platform independent
 * easy to use
+* no dynamic memory allocation
 
 ##### Cons
 * non-preemtive
