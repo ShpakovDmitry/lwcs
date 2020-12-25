@@ -101,7 +101,7 @@ lwcs_Time lwcs_getTime(void) {
     disableIRQ();
     lwcs_Time tmp = shedTime;
     enableIRQ();
-    return shedTime;
+    return tmp;
 }
 
 void lwcs_run(void) {
