@@ -74,4 +74,10 @@ int lwcs_changeTaskPeriod(lwcs_Pid pid, lwcs_Time period);
  * @return lwcs_Time sheduler current time
  */
 lwcs_Time lwcs_getTime(void);
+
+/**
+ * @brief run sheduler
+ */
+void lwcs_run(void);
+
 #endif  // LWCS_H

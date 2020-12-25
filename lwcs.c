@@ -104,6 +104,34 @@ lwcs_Time lwcs_getTime(void) {
     return shedTime;
 }
 
+void lwcs_run(void) {
+    lwcs_Time lastShedTime = 0;
+    lwcs_Time currentShedTime = 0;
+    while (1) {
+        currentShedTime = lwcs_getTime();
+        if ( currentShedTime == lastShedTime ) {
+            continue;
+        }
+        lastShedTime = currentShedTime;
+        for (uint8_t i = 0; i < LWCS_MAX_TASKS; i++) {
+            lwcs_TaskDescriptor* task = &taskTable[i];
+            if (task->task == NULL) {
+                continue;
+            }
+
+            if ( lastShedTime >= task->nextRun ) {
+                if ( task->task() == -1 ) {
+                    lwcs_deleteTask(task->pid);
+                    continue;
+                }
+                task->lastRun = lastShedTime;
+                task->nextRun = lastShedTime + task->period;
+            }
+        }
+    }
+}
+
+
 static lwcs_Pid addTaskGeneric(lwcs_TaskDescriptor taskDescriptor) {
     int i;
     i = findFreeSpaceInTaskTable();
