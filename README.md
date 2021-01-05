@@ -49,7 +49,7 @@ int blinkLedForever() {
 }
 
 int blinkLedOnce() {
-    LED_invert(LED_RED);
+    LED_invert(LED_GREEN);
     return -1;
 }
 ```
