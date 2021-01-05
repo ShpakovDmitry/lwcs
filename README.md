@@ -19,3 +19,37 @@ loop. This *feature* gives the biggest problem of cooperative sheduler - each
 process should not be blocking and do not use busy waiting on it own,
 state-machines could be used instead, if action on different events is required
 inside the process.
+
+##### Usage example
+```c
+#include <led.h>
+#include "lwcs.h"
+
+static const uint32_t jiffiesInMilliSec = 1;
+extern lwcs_Time getJiffies(void);
+
+static const lwcs_Time BLINK_RED_LED_PERIOD = 500;
+static const lwcs_Time BLINK_GREEN_LED_PERIOD = 900;
+
+int blinkLedForever(void);
+int blinkLedOnce(void);
+
+void main(void) {
+    lwcs_initialize(jiffiesInMilliSec, &getJiffies);
+
+    lwcs_addTask(&blinkRedLedForever, BLINK_RED_LED_PERIOD);
+    lwcs_addTask(&blinkGreenLedOnce, BLINK_GREEN_LED_PERIOD);
+
+    lwcs_run();
+}
+
+int blinkLedForever() {
+    LED_invert(LED_RED);
+    return 0;
+}
+
+int blinkLedOnce() {
+    LED_invert(LED_RED);
+    return -1;
+}
+```
