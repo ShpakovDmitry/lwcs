@@ -23,7 +23,7 @@ inside the process.
 ##### Usage example
 Simply put `lwcs.h` and `lwcs.c` files in your working directory.
 
-!!!IMPORTANT: Make sure every task is simple fast and non-blocking. IMPORTANT!!!
+!!! **Make sure every task is simple fast and non-blocking.**
 
 ```c
 #include <led.h>
