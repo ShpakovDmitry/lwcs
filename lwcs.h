@@ -60,12 +60,6 @@ int lwcs_deleteTask(lwcs_Pid pid);
 int lwcs_changeTaskPeriod(lwcs_Pid pid, lwcs_Time period);
 
 /**
- * @brief get sheduler current time
- * @return lwcs_Time sheduler current time
- */
-lwcs_Time lwcs_getTime(void);
-
-/**
  * @brief run sheduler
  */
 void lwcs_run(void);
