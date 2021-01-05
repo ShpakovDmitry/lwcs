@@ -1,4 +1,4 @@
-**lwcs** is as **L**ightweight **C**ooperative **S**cheduler for short.
+**lwcs** is as **L**ight**w**eight **C**ooperative **S**cheduler for short.
 
 ##### Pros
 * lightweight
@@ -21,6 +21,10 @@ state-machines could be used instead, if action on different events is required
 inside the process.
 
 ##### Usage example
+Simply put `lwcs.h` and `lwcs.c` files in your working directory.
+
+!!! Make sure every task is simple fast and non-blocking.
+
 ```c
 #include <led.h>
 #include "lwcs.h"
