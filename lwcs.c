@@ -30,29 +30,19 @@ static const lwcs_TaskDescriptor lwcs_emptyTask = {
     .nextRun = 0
 };
 
-static volatile lwcs_Time shedTime;
 static lwcs_TaskDescriptor taskTable[LWCS_MAX_TASKS] = { 0 };
 static uint32_t ticksInMilisec;
-static void (*disableIRQ)(void);
-static void (*enableIRQ)(void);
+static lwcs_Time (*lwcs_getJiffies)(void);
 
 static lwcs_Pid addTaskGeneric(lwcs_TaskDescriptor taskDescriptor);
 static int findFreeSpaceInTaskTable(void);
 static int findPidInTaskTable(lwcs_Pid pid);
 
 void lwcs_initialize(uint32_t jiffiesInMilliSec,
-                     lwcs_Time currTime,
-                     void (* disableTickInterrupt)(void),
-                     void (* enableTickInterrupt)(void)
+                     lwcs_Time (* getJiffies)(void)
                      ) {
     ticksInMilisec = jiffiesInMilliSec;
-    shedTime = currTime;
-    disableIRQ = disableTickInterrupt;
-    enableIRQ = enableTickInterrupt;
-}
-
-void lwcs_tickTime() {
-    shedTime++;
+    lwcs_getJiffies = getJiffies;
 }
 
 lwcs_Pid lwcs_addTask(lwcs_Task task, lwcs_Time period) {
@@ -68,7 +58,7 @@ lwcs_Pid lwcs_runTaskAt(lwcs_Task task, lwcs_Time time) {
     lwcs_TaskDescriptor taskToAdd;
     taskToAdd = lwcs_emptyTask;
     taskToAdd.task = task;
-    taskToAdd.nextRun = time;
+    taskToAdd.nextRun = time * ticksInMilisec;
     return addTaskGeneric(taskToAdd);
 }
 
@@ -97,18 +87,12 @@ int lwcs_changeTaskPeriod(lwcs_Pid pid, lwcs_Time period) {
     return 0;
 }
 
-lwcs_Time lwcs_getTime(void) {
-    disableIRQ();
-    lwcs_Time tmp = shedTime;
-    enableIRQ();
-    return tmp;
-}
-
 void lwcs_run(void) {
     lwcs_Time lastShedTime = 0;
     lwcs_Time currentShedTime = 0;
     while (1) {
-        currentShedTime = lwcs_getTime();
+        currentShedTime = lwcs_getJiffies();
+        currentShedTime *= ticksInMilisec;
         if ( currentShedTime == lastShedTime ) {
             continue;
         }

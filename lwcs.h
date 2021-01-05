@@ -19,23 +19,13 @@ typedef int lwcs_Pid;           ///< Process ID (PID)
  * Should be called prior to any other lwcs method
  * @param jiffiesInMilliSec uint32_t Jiffies in millisecond
  * set for proper time scale
- * @param currTime lwcs_Time set current system time at sheduler startup
- * @param void (*)(void) disableTickInterrupt callback to tick interrupt disable
- * @param void (*)(void) enableTickInterrupt callback to tick interrupt enable
+ * @param lwcs_Time (*)(void) getJiffies callback to get Jiffies
  * @return void
  */
 void lwcs_initialize(uint32_t jiffiesInMilliSec,
-                     lwcs_Time currTime,
-                     void (* disableTickInterrupt)(void),
-                     void (* enableTickInterrupt)(void)
+                     lwcs_Time (* getJiffies)(void)
                      );
 
-/**
- * @brief Tick sheduler time
- * Should be placed as callback to any timer interrupt
- * @return void
- */
-void lwcs_tickTime();
 
 /**
  * @brief Add task to sheduler
