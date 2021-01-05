@@ -45,11 +45,15 @@ void main(void) {
 
 int blinkLedForever() {
     LED_invert(LED_RED);
+
+    // if task returns 0 then task is preserved in scheduler run list
     return 0;
 }
 
 int blinkLedOnce() {
     LED_invert(LED_GREEN);
+
+    // if task returns -1 then task is removed from scheduler run list
     return -1;
 }
 ```
